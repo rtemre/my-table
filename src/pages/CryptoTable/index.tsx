@@ -26,6 +26,7 @@ const CryptoTable: React.FC = () => {
   const columns = [
     columnHelper.accessor("name", {
       header: () => <span>Name</span>,
+      enableColumnFilter: false,
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
     }),

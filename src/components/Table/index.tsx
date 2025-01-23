@@ -56,29 +56,45 @@ const Table = <T extends object>({ columns, data }: TableProps<T>) => {
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
                   {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        onClick: header.column.getToggleSortingHandler(),
-                        style: {
-                          cursor: header.column.getCanSort()
-                            ? "pointer"
-                            : "default",
-                        },
-                      }}
-                    >
-                      {/* {header.renderHeader()} */}
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {header.column.getCanSort() && (
-                        <span>
-                          {header.column.getIsSorted() === "asc"
-                            ? " 🔼"
-                            : header.column.getIsSorted() === "desc"
-                            ? " 🔽"
-                            : ""}
-                        </span>
+                    <div>
+                      <div
+                        {...{
+                          onClick: header.column.getToggleSortingHandler(),
+                          style: {
+                            cursor: header.column.getCanSort()
+                              ? "pointer"
+                              : "default",
+                          },
+                        }}
+                      >
+                        {/* {header.renderHeader()} */}
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {header.column.getCanSort() && (
+                          <span>
+                            {header.column.getIsSorted() === "asc"
+                              ? " 🔼"
+                              : header.column.getIsSorted() === "desc"
+                              ? " 🔽"
+                              : ""}
+                          </span>
+                        )}
+                      </div>
+                      {/* Column Filter: A filter input field beneath its header if filtering is enabled for that column */}
+                      {header.column.getCanFilter() && (
+                        <input
+                          type="text"
+                          placeholder={`Filter ${header.column.id}`}
+                          value={
+                            (header.column.getFilterValue() as string) || ""
+                          }
+                          onChange={(e) =>
+                            header.column.setFilterValue(e.target.value)
+                          }
+                          className="column-filter-input"
+                        />
                       )}
                     </div>
                   )}
