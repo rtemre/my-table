@@ -15,12 +15,22 @@ const columnHelper = createColumnHelper<Coin>();
 
 const CryptoTable: React.FC = () => {
   const [coins, setCoins] = useState<Coin[]>([]);
+  const fetchApi = async () => {
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
+      );
+      const result = await response.json();
+      if (result) {
+        setCoins(result);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd")
-      .then((response) => response.json())
-      .then((data) => setCoins(data))
-      .catch((error) => console.error("Error fetching data:", error));
+    fetchApi();
   }, []);
 
   const columns = [
@@ -50,7 +60,7 @@ const CryptoTable: React.FC = () => {
   return (
     <div>
       <h1>Cryptocurrency Prices</h1>
-      <Table columns={columns} data={coins} />
+      {coins && coins.length > 0 && <Table columns={columns} data={coins} />}
     </div>
   );
 };
